@@ -1,7 +1,6 @@
 let wins = 0;
 let loss = 0;
 
-
 function getPC(){
     let ran = Math.floor(Math.random() * 3);
     let res;
@@ -23,23 +22,17 @@ function getPC(){
     return res;
 }
 
-function getPlayer(){
-    let choice = prompt("Enter Rock, Paper or Scissors");
-    choice = choice.toLowerCase();
-
-    while(choice != "rock" && choice != "paper" && choice != "scissors"){
-        choice = prompt("Enter Rock, Paper or Scissors");
-        choice = choice.toLowerCase();
-    }
-
-    return choice;
-}
-
-function playRound(pc, player){
+function playRound(p){
 
     let round;
+    let pc = getPC();
+    let player = p.innerHTML.toLowerCase();
 
-    if(pc == "rock" && player == "scissors"){
+    if(pc == player){
+        round = "Its a Draw!"
+    }
+
+    else if(pc == "rock" && player == "scissors"){
         round = `You lose ${pc} beats ${player}`
         loss ++;
     }
@@ -59,27 +52,33 @@ function playRound(pc, player){
         wins ++;
     }
 
-    return round;
+    let ret = document.createElement("span")
+    ret.innerText = round;
+
+    document.querySelector(".results").append(ret);
+
+    if((wins + loss) == 5){
+        let gRes;
+        
+        if(wins > loss){
+            gRes = `You won ${wins} to ${loss}`
+        }
+
+        else{
+            gRes = `You Lost ${loss} to ${wins}`
+        }
+        
+        wins = 0;
+        loss = 0;
+
+        document.querySelector(".results").append("Game over " + gRes);
+    }
 }
 
-function game(){
-    wins = 0;
-    loss = 0;
+let buts = document.querySelectorAll(".but");
 
-    for(let i = 0; i < 5; i++){
-        console.log(playRound(getPC(), getPlayer()));
-    }
-
-    if(wins > loss){
-        console.log("You win the game");
-    }
-
-    else if(wins < loss){
-        console.log("You lose the game");
-    }
-
-    else{
-        console.log("Its a Draw");
-    }
+for(let i = 0; i < buts.length; i++){
+    buts[i].addEventListener("click", function(){
+        playRound(buts[i]);
+    });
 }
-
